@@ -15,7 +15,7 @@ def getCOA(df):
     
     # converts the DataFrame into a dictionary where the keys are the index values  
     # and the values are dictionaries containing the column names and corresponding values for each row.
-    df = df.drop(columns=['Description', 'DR/CR'])
+    #df = df.drop(columns=['Description', 'DR/CR'])
     ed = df.set_index("Payroll Item").to_dict("index")
 
     # iterate over each item (key-value pair) in the dictionary 
@@ -23,6 +23,23 @@ def getCOA(df):
     for k1, v1 in ed.items(): 
         # Use list comprehension to remove decimal points from the dictionary
         # Change k1 : v1 key value pair to k : v (where v is v1 converted to an integet)
-        ed[k1] = {k: int(v) for k, v in v1.items()}
+        ed[k1] = {k: v for k, v in v1.items()}
+       
+    return ed
+
+def get_dept_to_location(df):
+   
+    
+    # converts the DataFrame into a dictionary where the keys are the index values  
+    # and the values are dictionaries containing the column names and corresponding values for each row.
+    #df = df.drop(columns=['Description', 'DR/CR'])
+    ed = df.set_index("Primary Job Title").to_dict("index")
+
+    # iterate over each item (key-value pair) in the dictionary 
+    #print(df.head)
+    for k1, v1 in ed.items(): 
+        # Use list comprehension to remove decimal points from the dictionary
+        # Change k1 : v1 key value pair to k : v (where v is v1 converted to an integet)
+        ed[k1] = {k: v for k, v in v1.items()}
        
     return ed

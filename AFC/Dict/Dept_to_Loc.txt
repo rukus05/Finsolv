@@ -1,0 +1,13 @@
+{'Nurse-RN': {'index': 0, 'Department ID': 100300, 'LOC': 'HQ001', 'Class': 'AFC', 'Department name': 'Nursing'}, 
+'Physician': {'index': 1, 'Department ID': 100100, 'LOC': 'GA101', 'Class': 'AFC', 'Department name': 'Physician'}, 
+'Medical Assistant': {'index': 2, 'Department ID': 100400, 'LOC': 'HQ001', 'Class': 'AFC', 'Department name': 'Medical Assistant'}, 
+'Clinical Operations Manager': {'index': 3, 'Department ID': 700100, 'LOC': 'HQ001', 'Class': 'AFC', 'Department name': 'Clinical Management'}, 
+'Front Office Specialist': {'index': 4, 'Department ID': 700215, 'LOC': 'HQ001', 'Class': 'AFC', 'Department name': 'Front Office'}, 
+'Billing Specialist': {'index': 5, 'Department ID': 702420, 'LOC': 'HQ001', 'Class': 'AFC', 'Department name': 'RCM'}, 
+'Insurance Verification / Authorization Specialist': {'index': 6, 'Department ID': 700305, 'LOC': 'HQ001', 'Class': 'AFC', 'Department name': 'Authorization'}, 
+'Procedure Scheduling Specialist': {'index': 7, 'Department ID': 700240, 'LOC': 'HQ001', 'Class': 'AFC', 'Department name': 'Scheduling'}, 
+'Marketing Manager': {'index': 8, 'Department ID': 705000, 'LOC': 'HQ001', 'Class': 'AFC', 'Department name': 'Marketing'}, 
+'President': {'index': 9, 'Department ID': 707000, 'LOC': 'HQ001', 'Class': 'AFC', 'Department name': 'Executive'}, 
+'Practice Administrator': {'index': 10, 'Department ID': 700120, 'LOC': 'HQ001', 'Class': 'AFC', 'Department name': 'Practice Management'}, 
+'Front Office / Patient Communications Specialist': {'index': 11, 'Department ID': 700215, 'LOC': 'HQ001', 'Class': 'AFC', 'Department name': 'Front Office'}, 
+'Patient Communication Specialist': {'index': 12, 'Department ID': 700230, 'LOC': 'HQ001', 'Class': 'AFC', 'Department name': 'Call Center'}}

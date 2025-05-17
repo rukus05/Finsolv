@@ -3,34 +3,6 @@
 # This file holds definitions for the TOI Payroll Journal Entry Automations Python Program.
 
 # Create a Dictionary Class that ignores trailing and leading spaces.
-class RemoveSpacesDict(dict):
-    
-    # Constructor Method
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-    
-    # Helper method that returns the stripped key
-    def _strip_key(self, key):
-        return key.strip()
-    
-    # Helper method that returns 2 keys; original and stripped key, which could be the same.
-    def _generate_lookup_keys(self, key):
-        return key, self._strip_key(key)
-    
-    # Method that overrides original Dict key retrieval method.
-    # Calls _generate_lookup_keys to get 2 kesy.
-    # Uses only the stripped key for the dictionary lookup.
-    #  This allows you to look up keys with or without trailing spaces at the end, and it retrieves the value associated with the stripped key.
-    def __getitem__(self, key):
-        original_key, stripped_key = self._generate_lookup_keys(key)
-        return super().__getitem__(stripped_key)
-
-    # Method that overrides original Dict key assignment method.  Similar to above method
-    # Only stripped key is used for assigning the key value.  
-    def __setitem__(self, key, value):
-        original_key, stripped_key = self._generate_lookup_keys(key)
-        super().__setitem__(stripped_key, value)
-
 
 
 # This list represents the column headers for the COA.  It is ultimately used to get the column number ("index")
@@ -99,7 +71,7 @@ credit_rollup_accts = ["Garnishments", "Net Pay",  "HSA_Deduction", "401K Payabl
 remove_acct_list = ['Overtime Hours Total', 'WAGES', 'OT', 'BONUS', 'SIGNING BONUS', 'VACATION', 'SEVERANCE', 'Gross Pay']
 
 # Create an instance of the custom RemoveSpacesDict class, which will contain the dictionary of locations.
-locations_dict = RemoveSpacesDict()
+#locations_dict = RemoveSpacesDict()
 
 locations_dict = {
     'The Oncology Institute, Inc.' : 101, \
