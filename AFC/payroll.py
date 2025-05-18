@@ -4,8 +4,6 @@ import numpy as np
 import re
 import tkinter as tk
 from tkinter import filedialog as fd
-#from definitions import coa_dict as coa
-#from afc_module.definitions import coa_dict as coa
 from afc_module.definitions import hdc_list as hdcl
 from afc_module.definitions import roll_up_accts as rollup
 from afc_module.definitions import remove_acct_list as remove_accts
@@ -13,8 +11,6 @@ from zpack.fns import FilePrompt
 from zpack.fns import save_dataframe
 from get_coa import getCOA
 from get_coa import get_dept_to_location
-#from definitions import baseline_accounts as baseline
-
 
 def main():
     
@@ -114,13 +110,25 @@ def main():
                 JE_dict[i][0] += row[i].sum()
                 JE_dict[i][1] = dict_COA[i][groupings[0]]
                 if JE_dict[i][0] != 0:
-                    df_Output.loc[len(df_Output.index)] = [groupings[0], groupings[1], groupings[2], groupings[3], row['Payroll'], JE_dict[i][1], JE_dict[i][0], '', i]
+                    # row['Payroll'] would give this:
+                    # 3     04/14/2025 - 04/27/2025, Regular
+                    # 4     04/14/2025 - 04/27/2025, Regular
+                    # 5     04/14/2025 - 04/27/2025, Regular
+                    # 12    04/14/2025 - 04/27/2025, Regular
+                    # 16    04/14/2025 - 04/27/2025, Regular
+                    # Name: Payroll, dtype: object
+                    # To clean this up, you have to extract the unique date range from the 'Payroll' column using .unique().
+                    # pay_range is an array with a single element.  Output is something like:  ['06/11/1974']
+                    # Call pay_range[0] in df_Output to eliminate the brackets and single quotes
+                    pay_range = row['Payroll'].str.extract(r'(\d{2}/\d{2}/\d{4} - \d{2}/\d{2}/\d{4})', expand=False).unique()
+                    df_Output.loc[len(df_Output.index)] = [groupings[0], groupings[1], groupings[2], groupings[3], pay_range[0], JE_dict[i][1], JE_dict[i][0], '', i]
             elif i in credit_accounts:
                 account = "Credit"
                 JE_dict[i][0] += row[i].sum()
                 JE_dict[i][1] = dict_COA[i][groupings[0]]
                 if JE_dict[i][0] != 0:
-                    df_Output.loc[len(df_Output.index)] = [groupings[0], groupings[1], groupings[2], groupings[3], row['Payroll'], JE_dict[i][1], '', JE_dict[i][0], i]
+                    pay_range = row['Payroll'].str.extract(r'(\d{2}/\d{2}/\d{4} - \d{2}/\d{2}/\d{4})', expand=False).unique()
+                    df_Output.loc[len(df_Output.index)] = [groupings[0], groupings[1], groupings[2], groupings[3], pay_range[0], JE_dict[i][1], '', JE_dict[i][0], i]
             # This last elif adds both a debit and credit row
             # The debit row is determinied similarly to the first if statement above
             # The credit row has the same amount in the 'Debit' column filled in the 'Credit' column.  The GL is taken from the CR GL Account in the Dep-Loc maaping (dict_d2l)
@@ -129,8 +137,9 @@ def main():
                 JE_dict[i][1] = dict_COA[i][groupings[0]]
                 CR_GL = dict_COA[i]['CR GL Account']
                 if JE_dict[i][0] != 0:
-                    df_Output.loc[len(df_Output.index)] = [groupings[0], groupings[1], groupings[2], groupings[3], row['Payroll'], JE_dict[i][1], JE_dict[i][0], '', i]
-                    df_Output.loc[len(df_Output.index)] = [groupings[0], groupings[1], groupings[2], groupings[3], row['Payroll'], CR_GL, '', JE_dict[i][0], i]
+                    pay_range = row['Payroll'].str.extract(r'(\d{2}/\d{2}/\d{4} - \d{2}/\d{2}/\d{4})', expand=False).unique()
+                    df_Output.loc[len(df_Output.index)] = [groupings[0], groupings[1], groupings[2], groupings[3], pay_range[0], JE_dict[i][1], JE_dict[i][0], '', i]
+                    df_Output.loc[len(df_Output.index)] = [groupings[0], groupings[1], groupings[2], groupings[3], pay_range[0], CR_GL, '', JE_dict[i][0], i]
 
 
             
