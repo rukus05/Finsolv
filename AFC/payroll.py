@@ -13,10 +13,10 @@ from get_coa import getCOA
 from get_coa import get_dept_to_location
 
 def main():
-    
+    # Set the time for when you started the program.  Used to find overall program run time.
     start = time.time()
 
-    # Get the updated Chart of Accounts File
+    # Ingest the Chart of Accounts File
     print('Select the latest Chart of Accounts file:')
     z = FilePrompt()
     df_COA_file = pd.read_excel(z)
@@ -36,10 +36,9 @@ def main():
             debit_accounts.append(k)
         elif v['DR/CR'] == 'Credit':
             credit_accounts.append(k)
-        
-  
+    
 
-    # Get the Dept Location lookup File
+    # GIngest the Dept Location lookup File
     print('Select the latest Dept-to-Location lookup file:')
     z = FilePrompt()
     df_d2l_file = pd.read_excel(z)
@@ -49,11 +48,9 @@ def main():
     dict_d2l = get_dept_to_location(df_d2l_file)
     #print(dict_d2l)
     
-
-    
-    
-    # Read in Data from the "RawData.xlsx" file.
-    print('Select the raw data file to run Payroll for:')
+       
+    # Read in the Raw Payroll Data
+    print('Select the raw Payroll data file:')
     f = FilePrompt()
     df_afc = pd.read_excel(f)
     #df_afc = pd.read_excel(f, dtype={'Home Department Code': str})
@@ -71,12 +68,13 @@ def main():
     #df_afc['Credit Sum'] = df_afc[credit_accounts].sum(axis=1)
     #df_afc['Debit Sum'] = df_afc[debit_accounts].sum(axis=1)
 
-    # Convert the Pay Date column to a datetime data type
+    # Convert the Pay Date column to a datetime data type.  Puts the date in a friendly format
     df_afc['Payroll pay date'] = pd.to_datetime(df_afc['Payroll pay date'])
     # Remove the hours, minutes, and seconds
     df_afc['Payroll pay date'] = df_afc['Payroll pay date'].dt.date
     
-    # Use the Primary Job Title from the Input to determine the rows Department ID, Location, and Class--all defined in the Dept to Loc mapping dict, dict_d2l.
+    # Use the Primary Job Title from the raw data file to determine the rows Department ID, Location, and Class--all defined in the Dept to Loc mapping dict, dict_d2l.
+    # Primary Job Title is the Key in dict_d2l.  Use this to look up the DepartmentID, Loc, and Class.
     for index, row in df_afc.iterrows():
         df_afc.loc[index, 'Department ID'] = dict_d2l[df_afc.loc[index, 'Primary job title']]['Department ID']
         df_afc.loc[index, 'LOCATION'] = dict_d2l[df_afc.loc[index, 'Primary job title']]['LOC']
@@ -120,15 +118,19 @@ def main():
                     # To clean this up, you have to extract the unique date range from the 'Payroll' column using .unique().
                     # pay_range is an array with a single element.  Output is something like:  ['06/11/1974']
                     # Call pay_range[0] in df_Output to eliminate the brackets and single quotes
+                    #
+                    # Had to do the same thing for Primary Job Title that's added in the description
                     pay_range = row['Payroll'].str.extract(r'(\d{2}/\d{2}/\d{4} - \d{2}/\d{2}/\d{4})', expand=False).unique()
-                    df_Output.loc[len(df_Output.index)] = [groupings[0], groupings[1], groupings[2], groupings[3], pay_range[0], JE_dict[i][1], JE_dict[i][0], '', i]
+                    pjt = row['Primary job title'].unique()
+                    df_Output.loc[len(df_Output.index)] = [groupings[0], groupings[1], groupings[2], groupings[3], pay_range[0], JE_dict[i][1], JE_dict[i][0], '', i + ',  ' + pjt[0]]
             elif i in credit_accounts:
                 account = "Credit"
                 JE_dict[i][0] += row[i].sum()
                 JE_dict[i][1] = dict_COA[i][groupings[0]]
                 if JE_dict[i][0] != 0:
                     pay_range = row['Payroll'].str.extract(r'(\d{2}/\d{2}/\d{4} - \d{2}/\d{2}/\d{4})', expand=False).unique()
-                    df_Output.loc[len(df_Output.index)] = [groupings[0], groupings[1], groupings[2], groupings[3], pay_range[0], JE_dict[i][1], '', JE_dict[i][0], i]
+                    pjt = row['Primary job title'].unique()
+                    df_Output.loc[len(df_Output.index)] = [groupings[0], groupings[1], groupings[2], groupings[3], pay_range[0], JE_dict[i][1], '', JE_dict[i][0], i + ',  ' + pjt[0]]
             # This last elif adds both a debit and credit row
             # The debit row is determinied similarly to the first if statement above
             # The credit row has the same amount in the 'Debit' column filled in the 'Credit' column.  The GL is taken from the CR GL Account in the Dep-Loc maaping (dict_d2l)
@@ -138,14 +140,12 @@ def main():
                 CR_GL = dict_COA[i]['CR GL Account']
                 if JE_dict[i][0] != 0:
                     pay_range = row['Payroll'].str.extract(r'(\d{2}/\d{2}/\d{4} - \d{2}/\d{2}/\d{4})', expand=False).unique()
-                    df_Output.loc[len(df_Output.index)] = [groupings[0], groupings[1], groupings[2], groupings[3], pay_range[0], JE_dict[i][1], JE_dict[i][0], '', i]
-                    df_Output.loc[len(df_Output.index)] = [groupings[0], groupings[1], groupings[2], groupings[3], pay_range[0], CR_GL, '', JE_dict[i][0], i]
+                    pjt = row['Primary job title'].unique()
+                    df_Output.loc[len(df_Output.index)] = [groupings[0], groupings[1], groupings[2], groupings[3], pay_range[0], JE_dict[i][1], JE_dict[i][0], '', i + ',  ' + pjt[0]]
+                    df_Output.loc[len(df_Output.index)] = [groupings[0], groupings[1], groupings[2], groupings[3], pay_range[0], CR_GL, '', JE_dict[i][0], i + ',  ' + pjt[0]]
 
 
-            
-            
-
-        
+    # Calculate the time it took to run the program.
     runningtime = time.time() - start
     print("Save the Output File...")
     # Start the "Save As" dialog box.
