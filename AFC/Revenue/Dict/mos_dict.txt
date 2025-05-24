@@ -1,0 +1,5 @@
+{'January 2025': {'Visit Primary Carrier Name': 'PRIV1 - PRIVATE PAY', 'Adjustments': 25084.0, 'Allowed Amount': 36779.0, 'Charges': 36779.0, 'Insurance Payments': 0.0, 'Patient Payments': 7197.32}, 
+'February 2025': {'Visit Primary Carrier Name': 'PRIV1 - PRIVATE PAY', 'Adjustments': 50144.0, 'Allowed Amount': 73808.0, 'Charges': 73808.0, 'Insurance Payments': 0.0, 'Patient Payments': 20819.0}, 
+'March 2025': {'Visit Primary Carrier Name': 'PRIV1 - PRIVATE PAY', 'Adjustments': 25906.0, 'Allowed Amount': 38201.0, 'Charges': 38201.0, 'Insurance Payments': 0.0, 'Patient Payments': 12295.0}, 
+'April 2025': {'Visit Primary Carrier Name': 'PRIV1 - PRIVATE PAY', 'Adjustments': 50966.0, 'Allowed Amount': 74966.85, 'Charges': 75230.0, 'Insurance Payments': 0.0, 'Patient Payments': 21213.92}, 
+'May 2025': {'Visit Primary Carrier Name': 'PRIV1 - PRIVATE PAY', 'Adjustments': 20956.0, 'Allowed Amount': 33325.0, 'Charges': 33325.0, 'Insurance Payments': 0.0, 'Patient Payments': 9200.0}}
